@@ -31,6 +31,8 @@ def call(Map config = [:]) {
                                                       passwordVariable: 'DOCKERHUB_PASS')]) {
                         sh """
                             echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
+                            docker tag notes-app:latest ${config.dockerRepo}:${env.BUILD_NUMBER}
+                            docker tag notes-app:latest ${config.dockerRepo}:latest
                             docker push ${config.dockerRepo}:${env.BUILD_NUMBER}
                             docker push ${config.dockerRepo}:latest
                             docker logout
@@ -52,4 +54,3 @@ def call(Map config = [:]) {
         }
     }
 }
-
